@@ -4,6 +4,15 @@ include_once "objetos/AlunoController.php";
 $controller = new AlunoController();
 $alunos = $controller->index();
 global $alunos;
+$a = null;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if(isset($_POST["pesquisar"])){
+        $a = $controller->pesquisaAluno($_POST["pesquisar"]);
+    }
+}
+
+var_dump($a);
 
 ?>
 
@@ -24,7 +33,29 @@ global $alunos;
 <body>
 
 <h1>Senac Rio Claro</h1>
+<h3>Pesquisar Aluno</h3>
 <h2>Alunos Cadastrados</h2>
+<form method="POST" action="index.php">
+    <label>RA</label>
+    <input type="number" name="pesquisar">
+    <button>Pesquisar</button>
+</form>
+
+<table>
+    <tr>
+        <td>RA</td>
+        <td>Nome</td>
+    </tr>
+    <?php if($a) : ?>
+        <?php foreach($a as $aluno) : ?>
+            <tr>
+                <td><?php echo $aluno->ra; ?></td>
+                <td><?php echo $aluno->nome; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
+</table>
 
 <table>
     <tr>
@@ -47,6 +78,9 @@ global $alunos;
     <?php endif; ?>
 
 </table>
+
+
+
 
 </body>
 </html>

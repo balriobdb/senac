@@ -21,4 +21,13 @@ Class Aluno{
         return $resultado->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public function PesquisaAluno($ra){
+        $sql = "SELECT * FROM alunos WHERE ra = :ra";
+        $resultado = $this->bd->prepare($sql);
+        $resultado->bindParam(":ra", $ra);
+        $resultado->execute();
+
+        return $resultado->fetchAll(PDO::FETCH_OBJ);
+    }
+
 }
