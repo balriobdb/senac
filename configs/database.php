@@ -22,4 +22,3 @@ Class Database{
         return $this->con;
     }
 }
-

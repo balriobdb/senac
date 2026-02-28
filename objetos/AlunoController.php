@@ -17,7 +17,21 @@ Class ALunoController{
         return $this->aluno->LerTodos();
     }
 
-    public function pesquisaAluno($ra){
-        return $this->aluno->PesquisaAluno($ra);
+    public function pesquisaAluno($valor, $tipo){
+        return $this->aluno->pesquisaAluno($valor, $tipo);
+    }
+
+    public function cadastrarAluno($dados){
+
+        $this->aluno->nome = $dados["nome"];
+        $this->aluno->email = $dados["email"];
+        $this->aluno->telefone = $dados["telefone"];
+        $this->aluno->login = $dados["login"];
+        $this->aluno->senha = $dados["senha"];
+
+        if($this->aluno->Cadastrar()){
+            header("location: index.php");
+            exit();
+        }
     }
 }
