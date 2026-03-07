@@ -8,9 +8,17 @@ global $alunos;
 $a = null;
 
 if($_SERVER["REQUEST_METHOD"] === "POST"){
-    if(isset($_POST["pesquisar"]) && isset($_POST["tipo"])){
-        $a = $controller->pesquisaAluno($_POST["pesquisar"], $_POST["tipo"]);
+    if(isset($_POST["pesquisar"])){
+        $a = $controller->pesquisaAluno($_POST["pesquisar"]);
     }
+}
+
+if($_SERVER["REQUEST_METHOD"] === "GET"){
+    if(isset($_GET["excluir"])){
+        $a = $controller->excluirAluno($_GET["excluir"]);
+        $a = $controller->atualizarAluno($_GET["alterar"]);
+    }
+
 }
 
 ?>
@@ -41,30 +49,25 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 <h3>Pesquisar Aluno</h3>
 
 <form method="POST" action="index.php">
-    <label>Pesquisar aluno: </label>
-    <select name="tipo">
-        <option value="ra">RA</option>
-        <option value="nome">Nome</option>
-    </select>
-    <input type="text" name="pesquisar">
+    <label>RA</label>
+    <input typep="number" name="pesquisar">
     <button>Pesquisar</button>
 </form>
 
-    <?php if($a) : ?>
-        <table border="1">
-            <tr>
-                <th>RA</th>
-                <th>Nome</th>
-            </tr>
-            <?php foreach($a as $aluno) : ?>
-                <tr>
-                    <td><?= $aluno->ra; ?></td>
-                    <td><?= $aluno->nome; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php endif; ?>
+<table>
+    <tr>
+        <td>RA</td>
+        <td>Nome</td>
+    </tr>
 
+    <?php if($a) : ?>
+<!--        <?php //foreach($a as $aluno) : ?> -->
+            <tr>
+                <td><?= $a->ra; ?></td>
+                <td><?= $a->nome; ?></td>
+            </tr>
+<!--        --><?php //endforeach; ?>
+    <?php endif; ?>
 
 </table>
 
@@ -87,6 +90,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         <td><?= $aluno->email; ?></td>
         <td><?= $aluno->telefone; ?></td>
         <td><?= $aluno->login; ?></td>
+        <td><a href="atualizar.php?alterar=<?= $aluno->ra ?>">Alterar</a> </td>
+        <td><a href="index.php?excluir=<?= $aluno->ra ?>">Excluir</a> </td>
     </tr>
     <?php endforeach; ?>
     <?php endif; ?>
