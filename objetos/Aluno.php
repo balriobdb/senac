@@ -32,7 +32,7 @@ Class Aluno{
     }
 
     public function cadastrar(){
-        $sql = "INSERT INTO alunos(nome, email, telefone, login, senha) VALUES(:nome, :email, :telefone, :login, :senha)";
+        $sql = "INSERT INTO alunos(nome, email, telefone, login, senha, imagem) VALUES(:nome, :email, :telefone, :login, :senha, :imagem)";
 
         $senha_hash = password_hash($this->senha, PASSWORD_DEFAULT);
 
@@ -42,6 +42,7 @@ Class Aluno{
         $stmt->bindParam(":telefone", $this->telefone, PDO::PARAM_STR);
         $stmt->bindParam(":login", $this->login, PDO::PARAM_STR);
         $stmt->bindParam(":senha", $senha_hash, PDO::PARAM_STR);
+        $stmt->bindParam(":imagem", $this->img, PDO::PARAM_STR);
 
         if($stmt->execute()){
             return true;
@@ -89,6 +90,24 @@ Class Aluno{
         return $resultado->fetch(PDO::FETCH_OBJ);
     }
 
+    public function login()
+    {
+        $sql = "SELECT * FROM alunos WHERE login = :login";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindParam(":login", $this->login, PDO::PARAM_STR);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_OBJ);
 
-
+        if($resultado){
+            if(password_verify($this->senha, $resultado->senha)){
+                session_start();
+                $_SESSION["aluno"] = $resultado;
+                header("Location: index.php");
+                exit();
+            } else{
+                header("Location: login.php");
+                exit();
+            }
+        }
+    }
 }

@@ -2,6 +2,12 @@
 
 include_once "objetos/AlunoController.php";
 
+session_start();
+if(!isset($_SESSION['aluno'])){
+    header("location: login.php");
+    exit();
+}
+
 $controller = new AlunoController();
 $alunos = $controller->index();
 global $alunos;
